@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+<<<<<<< HEAD
 # C extensions
 *.so
 
@@ -160,3 +161,19 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+=======
+# for ipc files (inter process communication)
+app/sandbox
+
+### PythonVanilla ###
+# Byte-compiled / optimized / DLL files
+**/__pycache__/
+**/*.py[cod] 
+*$py.class
+
+# Unit test
+**/.pytest_cache/
+
+# Python virtual environments - only needed for local work
+**/venv
+>>>>>>> af207ee... add python stuff to ignore
