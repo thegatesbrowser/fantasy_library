@@ -1,16 +1,19 @@
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator, Annotated
+from typing import AsyncGenerator, Annotated, TypeAlias
 
 
-from fastapi import FastAPI, Response
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, Response, Request
+from fastapi.responses import JSONResponse, PlainTextResponse
+from fastapi.exceptions import RequestValidationError
+import starlette
 import uvicorn
 from http import HTTPStatus
 import httpx
 from pydantic import Json
 import asyncio
 
-BOOK_URLS= {
+
+BOOK_URLS = {
     123: 'https://archive.org/download/historyofegyptch17324gut/17324.txt',
     456: 'https://archive.org/download/annakarenina01399gut/1399.txt'
 }
@@ -38,6 +41,14 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
 app = FastAPI(docs="hello this is fastapi app", lifespan=lifespan)
 
 
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    error = exc.args[0][0]
+    error_msg = f"{error['type']}: param {error['input']} is invalid\n{error['msg']}"
+    return PlainTextResponse(error_msg, status_code=400) 
+        # TODO: discuss error signalling to the client  
+
+
 @app.get("/")
 async def root() -> dict | str:
     return dict(name="app", hello="hi", user_agent="your mom")
@@ -46,23 +57,23 @@ async def root() -> dict | str:
 @app.get('/books/{book_id}')
 async def get_book(book_id: int) -> str:
     if (book_url := BOOK_URLS.get(book_id)) is None:
-        return "error: no such book found" # TODO: discuss error signalling to the client 
-    
+        return "error: no such book found"  # TODO: discuss error signalling to the client
+
         # TODO: check for bad page number
     try:
         async with httpx.AsyncClient() as client:
             resp = await client.get(book_url)
             if resp.status_code == HTTPStatus.FOUND:
-                # On 302, 'Location' header has the new link (what if there's another?)
                 resp = await client.get(resp.headers["Location"])
+                    # On 302, 'Location' header has the new link (what if there's another?)
             book = resp.text
     except Exception as e:
         return str(e)
         # return "error: couldn't download book for some reason"
-            # TODO: handle errors properly
-    
+        # TODO: handle errors properly
+
     return book[:1000]
-        
+
 
 if __name__ == "__main__":
     print(__name__)
