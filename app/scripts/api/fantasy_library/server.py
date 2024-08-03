@@ -1,16 +1,13 @@
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator, Annotated, TypeAlias
 
-
-from fastapi import FastAPI, Response, Request
-from fastapi.responses import JSONResponse, PlainTextResponse
-from fastapi.exceptions import RequestValidationError
-import starlette
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError, HTTPException
+from fastapi.encoders import jsonable_encoder
 import uvicorn
 from http import HTTPStatus
 import httpx
-from pydantic import Json
-import asyncio
 
 
 BOOK_URLS = {
@@ -19,7 +16,7 @@ BOOK_URLS = {
 }
 
 '''
-    Two kv stores - one for links, second for raw text
+    Two kv stores - one for links, second for raw text§
 
     - user picks a book by its id
     - if id is not in the raw text kvs
@@ -44,10 +41,14 @@ app = FastAPI(docs="hello this is fastapi app", lifespan=lifespan)
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
     error = exc.args[0][0]
-    error_msg = f"{error['type']}: param {error['input']} is invalid\n{error['msg']}"
-    return PlainTextResponse(error_msg, status_code=400) 
-        # TODO: discuss error signalling to the client  
-
+    error_msg = f"{error['type']}: param '{error['input']}' is invalid"
+    comment = f"{error['msg']}"
+    return JSONResponse(
+        status_code=HTTPStatus.BAD_REQUEST,
+        content=jsonable_encoder(
+            dict(error=error_msg, comment=comment)
+        )
+    )
 
 @app.get("/")
 async def root() -> dict | str:
@@ -55,9 +56,14 @@ async def root() -> dict | str:
 
 
 @app.get('/books/{book_id}')
-async def get_book(book_id: int) -> str:
+async def get_book(book_id: int) -> JSONResponse:
     if (book_url := BOOK_URLS.get(book_id)) is None:
-        return "error: no such book found"  # TODO: discuss error signalling to the client
+        return JSONResponse(
+            status_code=HTTPStatus.NOT_FOUND,
+            content=jsonable_encoder(
+                dict(error=f"no book '{book_id}' found")
+            )
+        )
 
         # TODO: check for bad page number
     try:
@@ -68,11 +74,10 @@ async def get_book(book_id: int) -> str:
                     # On 302, 'Location' header has the new link (what if there's another?)
             book = resp.text
     except Exception as e:
-        return str(e)
+        return JSONResponse(content=e)
         # return "error: couldn't download book for some reason"
         # TODO: handle errors properly
-
-    return book[:1000]
+    return JSONResponse(content=book[:1000])
 
 
 if __name__ == "__main__":
