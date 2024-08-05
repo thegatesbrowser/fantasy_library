@@ -55,19 +55,25 @@ async def test_error(*args):
         HTTPStatus.BAD_REQUEST, "zero division", "are you being intentionally dense?"
     )
 
+
 @app.exception_handler(HTTPStatus.NOT_FOUND)
 async def not_found(*args):
-    return ErrorResponse(HTTPStatus.NOT_FOUND, "not found", "this resource doesn't exist")
+    return ErrorResponse(
+        HTTPStatus.NOT_FOUND, "not found", "this resource doesn't exist"
+    )
+
+
+@app.get(
+    "/test/{id}", response_model=None
+)  # response_model is a factory which takes a return value
+# on by deafult, should be off because 'Response's are not valid Pydantic types (=not children of BaseModel)
+async def test(id: int) -> NoReturn | JSONResponse:
+    raise ZeroDivisionError
 
 
 @app.get("/")
 async def root() -> dict | str:
     return dict(name="app", hello="hi", user_agent="your mom")
-
-
-@app.get("/test/{id}", response_model=None)
-async def test(id: int) -> NoReturn | JSONResponse:
-    raise ZeroDivisionError
 
 
 @app.get("/books/{book_id}", response_model=None)
