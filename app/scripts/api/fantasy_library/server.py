@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator, Annotated, TypeAlias
+from typing import Any, AsyncGenerator, Annotated, NoReturn, TypeAlias
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Path, Query
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.encoders import jsonable_encoder
@@ -9,13 +9,16 @@ import uvicorn
 from http import HTTPStatus
 import httpx
 
+from responses import BBCodeResponse, ErrorResponse
+
 
 BOOK_URLS = {
-    123: 'https://archive.org/download/historyofegyptch17324gut/17324.txt',
-    456: 'https://archive.org/download/annakarenina01399gut/1399.txt'
+    123: "https://archive.org/download/historyofegyptch17324gut/17324.txt",
+    456: "https://archive.org/download/annakarenina01399gut/1399.txt",
 }
 
-'''
+
+"""
     Two kv stores - one for links, second for raw text§
 
     - user picks a book by its id
@@ -25,7 +28,7 @@ BOOK_URLS = {
     - else parse params
     - then find the page from the raw text kvs
     - finally return it to the client
-'''
+"""
 
 
 @asynccontextmanager
@@ -43,26 +46,37 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     error = exc.args[0][0]
     error_msg = f"{error['type']}: param '{error['input']}' is invalid"
     comment = f"{error['msg']}"
-    return JSONResponse(
-        status_code=HTTPStatus.BAD_REQUEST,
-        content=jsonable_encoder(
-            dict(error=error_msg, comment=comment)
-        )
+    return ErrorResponse(HTTPStatus.BAD_REQUEST, error_msg, comment)
+
+
+@app.exception_handler(ZeroDivisionError)
+async def test_error(*args):
+    return ErrorResponse(
+        HTTPStatus.BAD_REQUEST, "zero division", "are you being intentionally dense?"
     )
+
+@app.exception_handler(HTTPStatus.NOT_FOUND)
+async def not_found(*args):
+    return ErrorResponse(HTTPStatus.NOT_FOUND, "not found", "this resource doesn't exist")
+
 
 @app.get("/")
 async def root() -> dict | str:
     return dict(name="app", hello="hi", user_agent="your mom")
 
 
-@app.get('/books/{book_id}')
+@app.get("/test/{id}", response_model=None)
+async def test(id: int) -> NoReturn | JSONResponse:
+    raise ZeroDivisionError
+
+
+@app.get("/books/{book_id}", response_model=None)
 async def get_book(book_id: int) -> JSONResponse:
     if (book_url := BOOK_URLS.get(book_id)) is None:
-        return JSONResponse(
-            status_code=HTTPStatus.NOT_FOUND,
-            content=jsonable_encoder(
-                dict(error=f"no book '{book_id}' found")
-            )
+        return ErrorResponse(
+            HTTPStatus.NOT_FOUND,
+            "book not found",
+            f"book id '{book_id}' is non-existent",
         )
 
         # TODO: check for bad page number
@@ -71,13 +85,15 @@ async def get_book(book_id: int) -> JSONResponse:
             resp = await client.get(book_url)
             if resp.status_code == HTTPStatus.FOUND:
                 resp = await client.get(resp.headers["Location"])
-                    # On 302, 'Location' header has the new link (what if there's another?)
+                # On 302, 'Location' header has the new link (what if there's another?)
             book = resp.text
     except Exception as e:
-        return JSONResponse(content=e)
-        # return "error: couldn't download book for some reason"
-        # TODO: handle errors properly
-    return JSONResponse(content=book[:1000])
+        return ErrorResponse(
+            HTTPStatus.INTERNAL_SERVER_ERROR,
+            str(e),
+            "something happened during book download",
+        )
+    return BBCodeResponse(bbcode=book[:1000])
 
 
 if __name__ == "__main__":
