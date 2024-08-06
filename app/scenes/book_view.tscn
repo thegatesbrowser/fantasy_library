@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://dpmsd8uvxug6o"]
+
+[node name="BookView" type="Node2D"]
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = 989.0
+offset_top = 156.0
+offset_right = 1623.0
+offset_bottom = 906.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_colors/font_selected_color = Color(0, 0, 0, 1)
