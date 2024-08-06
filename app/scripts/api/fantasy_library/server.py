@@ -13,22 +13,11 @@ from responses import BBCodeResponse, ErrorResponse
 
 
 BOOK_URLS = {
-    123: "https://archive.org/download/historyofegyptch17324gut/17324.txt",
-    456: "https://archive.org/download/annakarenina01399gut/1399.txt",
+    123: "https://www.gutenberg.org/ebooks/17321.txt.utf-8",
+    456: "https://archive.org/download/annakarenina01399gut/1399.txt", # gets loaded for too long fmor archive
+    789: "https://www.gutenberg.org/ebooks/1399.txt.utf-8"
 }
 
-
-"""
-    Two kv stores - one for links, second for raw text§
-
-    - user picks a book by its id
-    - if id is not in the raw text kvs
-        - go to links kvs and download the book
-        - save the text to raw text kvs
-    - else parse params
-    - then find the page from the raw text kvs
-    - finally return it to the client
-"""
 
 
 @asynccontextmanager
@@ -49,12 +38,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     return ErrorResponse(HTTPStatus.BAD_REQUEST, error_msg, comment)
 
 
-@app.exception_handler(ZeroDivisionError)
-async def test_error(*args):
-    return ErrorResponse(
-        HTTPStatus.BAD_REQUEST, "zero division", "are you being intentionally dense?"
-    )
-
 
 @app.exception_handler(HTTPStatus.NOT_FOUND)
 async def not_found(*args):
@@ -65,8 +48,8 @@ async def not_found(*args):
 
 @app.get(
     "/test/{id}", response_model=None
-)  # response_model is a factory which takes a return value
-# on by deafult, should be off because 'Response's are not valid Pydantic types (=not children of BaseModel)
+)   # response_model is a factory which is called on a return value
+    # on by deafult, should be off because 'Response's are not valid Pydantic types (=not children of BaseModel)
 async def test(id: int) -> NoReturn | JSONResponse:
     raise ZeroDivisionError
 
@@ -89,9 +72,9 @@ async def get_book(book_id: int) -> JSONResponse:
     try:
         async with httpx.AsyncClient() as client:
             resp = await client.get(book_url)
-            if resp.status_code == HTTPStatus.FOUND:
+            while resp.status_code == HTTPStatus.FOUND:
                 resp = await client.get(resp.headers["Location"])
-                # On 302, 'Location' header has the new link (what if there's another?)
+                # On 302, 'Location' header has the new link
             book = resp.text
     except Exception as e:
         return ErrorResponse(
