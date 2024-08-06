@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://d07sxb6fh773o"]
+
+[ext_resource type="Script" path="res://scripts/book_model_not_multimesh.gd" id="1_nynd5"]
+[ext_resource type="Script" path="res://scripts/pages_animation.gd" id="2_npr18"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bpq4t"]
+albedo_color = Color(0.729412, 0.607843, 0.458824, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qu3u0"]
+size = Vector3(1, 0.0005, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_py0yu"]
+size = Vector3(1, 0.06, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_efeuq"]
+size = Vector3(1, 0.1, 1)
+
+[node name="BookModelNotMultimesh" type="Node3D" node_paths=PackedStringArray("root", "meshInstance")]
+script = ExtResource("1_nynd5")
+root = NodePath("Pages")
+meshInstance = NodePath("MeshInstance3D")
+pages = 20
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.254735, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_bpq4t")
+mesh = SubResource("BoxMesh_qu3u0")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.504087, -0.0706164, 0)
+material_override = SubResource("StandardMaterial3D_bpq4t")
+mesh = SubResource("BoxMesh_py0yu")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.516059, -0.051, 0)
+material_override = SubResource("StandardMaterial3D_bpq4t")
+mesh = SubResource("BoxMesh_efeuq")
+
+[node name="Pages" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.501958, -0.0403913, 0)
+script = ExtResource("2_npr18")
