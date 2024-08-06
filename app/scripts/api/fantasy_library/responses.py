@@ -13,7 +13,12 @@ class BBCodeResponse(JSONResponse):
         status: HTTPStatus = HTTPStatus.OK,
     ):
         super().__init__(
-            status_code=status, content=dict(error="ok", bbcode=bbcode, images=images)
+            status_code=status,
+            content=dict(
+                status=status,
+                bbcode=bbcode,
+                images=images
+            )
         )
 
 
@@ -22,11 +27,16 @@ class ErrorResponse(JSONResponse):
         self,
         status: HTTPStatus = HTTPStatus.NOT_FOUND,
         error: str = "",
-        error_msg: str = "",
+        comment: str = "",
     ):
         super().__init__(
-            status_code=status, content=dict(error=error, error_msg=error_msg)
-        )
+            status_code=status,
+            content=dict(
+                status=status,
+                error_msg=error,
+                comment=comment
+            )
+        ) # content value should be json-serializable
 
         # BBCodeResponse(status_code=400) should be valid
 
