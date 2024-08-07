@@ -10,11 +10,15 @@ from http import HTTPStatus
 import httpx
 
 from responses import BBCodeResponse, ErrorResponse
+from utils import Book
+
+
+import logging
 
 
 BOOK_URLS = {
     123: "https://www.gutenberg.org/ebooks/17321.txt.utf-8",
-    456: "https://archive.org/download/annakarenina01399gut/1399.txt", # gets loaded for too long fmor archive
+    456: "https://archive.org/download/annakarenina01399gut/1399.txt", # gets loaded for too long from archive (many redirects)
     789: "https://www.gutenberg.org/ebooks/1399.txt.utf-8"
 }
 
@@ -27,7 +31,10 @@ async def lifespan(app: FastAPI) -> AsyncGenerator:
     print("Stopped the app")
 
 
-app = FastAPI(docs="hello this is fastapi app", lifespan=lifespan)
+app = FastAPI(docs="hello this is fastapi app", lifespan=lifespan, debug=True)
+
+logger = logging.getLogger('uvicorn.error')
+logger.setLevel(logging.DEBUG)
 
 
 @app.exception_handler(RequestValidationError)
@@ -38,11 +45,16 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     return ErrorResponse(HTTPStatus.BAD_REQUEST, error_msg, comment)
 
 
-
 @app.exception_handler(HTTPStatus.NOT_FOUND)
 async def not_found(*args):
     return ErrorResponse(
         HTTPStatus.NOT_FOUND, "not found", "this resource doesn't exist"
+    )
+
+@app.exception_handler(AssertionError)
+async def assertion(*args, exc: AssertionError):
+    return ErrorResponse(
+        HTTPStatus.INTERNAL_SERVER_ERROR,"assertion error", "something really really bad happened"
     )
 
 
@@ -60,7 +72,7 @@ async def root() -> dict | str:
 
 
 @app.get("/books/{book_id}", response_model=None)
-async def get_book(book_id: int) -> JSONResponse:
+async def get_book(book_id: int, page: Annotated[int | None, Query(gt=0)] = None) -> JSONResponse: 
     if (book_url := BOOK_URLS.get(book_id)) is None:
         return ErrorResponse(
             HTTPStatus.NOT_FOUND,
@@ -68,28 +80,40 @@ async def get_book(book_id: int) -> JSONResponse:
             f"book id '{book_id}' is non-existent",
         )
 
-        # TODO: check for bad page number
+        # NOTE: default=None is for testing, user logic should be default=1 (he sees first page)
     try:
         async with httpx.AsyncClient() as client:
             resp = await client.get(book_url)
             while resp.status_code == HTTPStatus.FOUND:
                 resp = await client.get(resp.headers["Location"])
-                # On 302, 'Location' header has the new link
-            book = resp.text
+                    # On 302, 'Location' header has the new link
     except Exception as e:
         return ErrorResponse(
             HTTPStatus.INTERNAL_SERVER_ERROR,
             str(e),
             "something happened during book download",
         )
-    return BBCodeResponse(bbcode=book[:1000])
+    
+    book = Book(resp.text)
+    logger.debug(repr(book))
+
+    if page is None:
+        return BBCodeResponse(bbcode=book.get_text())
+
+    if page > book.pages:
+        return ErrorResponse(
+            HTTPStatus.BAD_REQUEST, f"invalid book page {page}",
+            f"this book only has {book.pages} pages",
+        )
+    return BBCodeResponse(bbcode=book.get_page(page))
 
 
 if __name__ == "__main__":
     print(__name__)
     try:
         uvicorn.run(
-            app="server:app", host="127.0.0.1", port=8000, reload=True, workers=1
+            app="server:app", host="127.0.0.1", port=8000, reload=True, workers=1,
+            log_level=logging.DEBUG
         )
     except KeyboardInterrupt as e:
         print(e)
