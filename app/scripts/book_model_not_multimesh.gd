@@ -11,11 +11,15 @@ extends Node3D
 		if not Engine.is_editor_hint(): return
 		instance_pages()
 
+@export var clear: bool:
+	set(value):
+		if not Engine.is_editor_hint(): return
+		clear_pages()
+
 var page_size = Vector3(1, 0.0005, 1)
 
 
 func _ready() -> void:
-	meshInstance.mesh
 	instance_pages()
 
 
@@ -23,8 +27,7 @@ func instance_pages() -> void:
 	(meshInstance.mesh as BoxMesh).size = page_size
 	
 	# Clear prev
-	for page in root.get_children():
-		page.queue_free()
+	clear_pages()
 	
 	# Create new
 	for i in range(pages):
@@ -41,3 +44,8 @@ func instance_pages() -> void:
 		root.add_child(page)
 	
 	print("Instanced " + str(pages) + " pages")
+
+
+func clear_pages() -> void:
+	for page in root.get_children():
+		page.queue_free()

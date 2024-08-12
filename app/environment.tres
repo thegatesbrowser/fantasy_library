@@ -1,19 +1,20 @@
 [gd_resource type="Environment" load_steps=3 format=3 uid="uid://boev5mavuo2g2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_siott"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+sky_top_color = Color(0.115674, 0.146523, 0.189422, 1)
+sky_horizon_color = Color(0.345856, 0.354282, 0.367584, 1)
+ground_bottom_color = Color(0.110995, 0.090662, 0.0670423, 1)
+ground_horizon_color = Color(0.345098, 0.352941, 0.368627, 1)
 
 [sub_resource type="Sky" id="Sky_puoxk"]
 sky_material = SubResource("ProceduralSkyMaterial_siott")
 
 [resource]
-background_mode = 2
+background_mode = 1
+background_color = Color(0.1, 0.0787333, 0.056, 1)
 sky = SubResource("Sky_puoxk")
-tonemap_mode = 1
-sdfgi_enabled = true
+tonemap_mode = 2
 glow_enabled = true
 glow_intensity = 3.86
 glow_strength = 1.21
 glow_bloom = 0.06
-fog_enabled = true

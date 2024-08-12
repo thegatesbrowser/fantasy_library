@@ -1,8 +1,22 @@
-[gd_scene load_steps=6 format=3 uid="uid://vpu4lqopm36e"]
+[gd_scene load_steps=10 format=3 uid="uid://vpu4lqopm36e"]
 
 [ext_resource type="Environment" uid="uid://boev5mavuo2g2" path="res://environment.tres" id="1_e3nvk"]
 [ext_resource type="Script" path="res://scripts/request_sender.gd" id="2_emmkv"]
 [ext_resource type="PackedScene" uid="uid://d07sxb6fh773o" path="res://scenes/book_model_not_multimesh.tscn" id="2_xua5s"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_b53hx"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lohd4"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_b53hx")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_c1nem"]
+viewport_path = NodePath("BookModelNotMultimesh/SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4u3r6"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_c1nem")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1lm4h"]
 bg_color = Color(0.67449, 0.42076, 0.312285, 1)
@@ -20,22 +34,37 @@ corner_radius_bottom_left = 5
 
 [node name="Main" type="Node3D"]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="Scene" type="Node3D" parent="."]
+
+[node name="OmniLight3D" type="OmniLight3D" parent="Scene"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.674061, 0.682249, -0.822577)
+light_color = Color(0.906432, 0.691774, 0.559611, 1)
+light_energy = 1.778
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Scene"]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+visible = false
+light_color = Color(0.905417, 0.689866, 0.574886, 1)
+light_energy = 1.3
 shadow_enabled = true
 shadow_bias = 0.01
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Scene"]
 environment = ExtResource("1_e3nvk")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.587785, 0.809017, 0, -0.809017, 0.587785, 0, 1.73, 0.877)
+[node name="Camera3D" type="Camera3D" parent="Scene"]
+transform = Transform3D(1, -6.9328e-16, 5.45623e-17, 5.45623e-17, 0.156434, 0.987688, -6.9328e-16, -0.987688, 0.156434, 2.08165e-12, 1.23, 0.187)
 fov = 60.0
 
 [node name="BookModelNotMultimesh" parent="." instance=ExtResource("2_xua5s")]
 
+[node name="Page" parent="BookModelNotMultimesh" index="5"]
+material_override = SubResource("StandardMaterial3D_lohd4")
+
+[node name="MeshInstance3D4" parent="BookModelNotMultimesh" index="6"]
+material_override = SubResource("StandardMaterial3D_4u3r6")
+
 [node name="UI" type="Control" parent="."]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -127,8 +156,12 @@ size_flags_vertical = 3
 focus_mode = 2
 selection_enabled = true
 
-[node name="RequestSender" type="Node" parent="." node_paths=PackedStringArray("le_request", "btn_request", "rtl_raw_result")]
+[node name="RequestSender" type="Node" parent="." node_paths=PackedStringArray("le_request", "btn_request", "rtl_raw_result", "rtl_result")]
 script = ExtResource("2_emmkv")
 le_request = NodePath("../UI/Control/MarginContainer/VBoxContainer/HBoxContainer/LineEdit")
 btn_request = NodePath("../UI/Control/MarginContainer/VBoxContainer/HBoxContainer/Button")
 rtl_raw_result = NodePath("../UI/Control/MarginContainer/VBoxContainer/Control/MarginContainer/RichTextLabel")
+rtl_result = NodePath("../BookModelNotMultimesh/SubViewport/PageViewport/MarginContainer/RichTextLabel")
+
+[editable path="BookModelNotMultimesh"]
+[editable path="BookModelNotMultimesh/SubViewport/PageViewport"]
