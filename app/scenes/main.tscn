@@ -11,12 +11,12 @@ viewport_path = NodePath("SubViewport")
 resource_local_to_scene = true
 albedo_texture = SubResource("ViewportTexture_b53hx")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_c1nem"]
-viewport_path = NodePath("BookModelNotMultimesh/SubViewport")
+[sub_resource type="ViewportTexture" id="ViewportTexture_ojcq3"]
+viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4u3r6"]
 resource_local_to_scene = true
-albedo_texture = SubResource("ViewportTexture_c1nem")
+albedo_texture = SubResource("ViewportTexture_ojcq3")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1lm4h"]
 bg_color = Color(0.67449, 0.42076, 0.312285, 1)
@@ -37,7 +37,7 @@ corner_radius_bottom_left = 5
 [node name="Scene" type="Node3D" parent="."]
 
 [node name="OmniLight3D" type="OmniLight3D" parent="Scene"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.674061, 0.682249, -0.822577)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.019, 1.062, -0.823)
 light_color = Color(0.906432, 0.691774, 0.559611, 1)
 light_energy = 1.778
 
@@ -53,7 +53,7 @@ shadow_bias = 0.01
 environment = ExtResource("1_e3nvk")
 
 [node name="Camera3D" type="Camera3D" parent="Scene"]
-transform = Transform3D(1, -6.9328e-16, 5.45623e-17, 5.45623e-17, 0.156434, 0.987688, -6.9328e-16, -0.987688, 0.156434, 2.08165e-12, 1.23, 0.187)
+transform = Transform3D(1, 0, 0, 0, 0.0610485, 0.998134, 0, -0.998134, 0.0610485, 0, 1.23, 0.077)
 fov = 60.0
 
 [node name="BookModelNotMultimesh" parent="." instance=ExtResource("2_xua5s")]

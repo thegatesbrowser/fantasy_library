@@ -1,6 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://boa66yyucskdx"]
+[gd_scene load_steps=8 format=3 uid="uid://boa66yyucskdx"]
 
 [ext_resource type="Texture2D" uid="uid://dmj52ta0vkl0t" path="res://assets/paper_texture.jpg" id="1_ybg2n"]
+[ext_resource type="FontFile" uid="uid://18of48n1rgg5" path="res://assets/font/Inter-Bold.otf" id="2_42jnj"]
+[ext_resource type="FontFile" uid="uid://2m75g4nsvmnf" path="res://assets/font/Inter-Regular.otf" id="2_n3lfg"]
+[ext_resource type="FontFile" uid="uid://33iixw3db3hr" path="res://assets/font/Inter-Italic.otf" id="4_0hfux"]
+[ext_resource type="FontFile" uid="uid://i4k4jsg1y3io" path="res://assets/font/Inter-BoldItalic.otf" id="5_upddy"]
+[ext_resource type="FontFile" uid="uid://dgak657s8r50k" path="res://assets/font/Monospace.ttf" id="6_2c1eo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q725h"]
 bg_color = Color(0.729412, 0.607843, 0.458824, 1)
@@ -47,9 +52,21 @@ theme_override_constants/margin_right = 100
 theme_override_constants/margin_bottom = 100
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer"]
+texture_filter = 4
 layout_mode = 2
 theme_override_colors/default_color = Color(0, 0, 0, 1)
-theme_override_font_sizes/normal_font_size = 46
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
+theme_override_fonts/normal_font = ExtResource("2_n3lfg")
+theme_override_fonts/bold_font = ExtResource("2_42jnj")
+theme_override_fonts/italics_font = ExtResource("4_0hfux")
+theme_override_fonts/bold_italics_font = ExtResource("5_upddy")
+theme_override_fonts/mono_font = ExtResource("6_2c1eo")
+theme_override_font_sizes/normal_font_size = 49
+theme_override_font_sizes/bold_font_size = 49
+theme_override_font_sizes/italics_font_size = 49
+theme_override_font_sizes/bold_italics_font_size = 49
+theme_override_font_sizes/mono_font_size = 49
 bbcode_enabled = true
 text = " Living valley had silent eat merits esteem bed. In last an or went wise as left. Visited civilly am demesne so colonel he calling. So unreserved do interested increasing sentiments. Vanity day giving points within six not law. Few impression difficulty his use has comparison decisively.
 

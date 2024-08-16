@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://d07sxb6fh773o"]
+[gd_scene load_steps=15 format=3 uid="uid://d07sxb6fh773o"]
 
 [ext_resource type="Script" path="res://scripts/book_model_not_multimesh.gd" id="1_nynd5"]
 [ext_resource type="Script" path="res://scripts/pages_animation.gd" id="2_npr18"]
 [ext_resource type="Texture2D" uid="uid://dmj52ta0vkl0t" path="res://assets/paper_texture.jpg" id="3_ejyxa"]
 [ext_resource type="PackedScene" uid="uid://boa66yyucskdx" path="res://scenes/page_viewport.tscn" id="3_papuc"]
+[ext_resource type="Script" path="res://scripts/set_viewport_texture.gd" id="5_3y22d"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bpq4t"]
 albedo_texture = ExtResource("3_ejyxa")
@@ -26,12 +27,12 @@ albedo_texture = SubResource("ViewportTexture_lqr5h")
 uv1_scale = Vector3(2, 2, 2.08165e-12)
 uv1_offset = Vector3(-0.33, 2.08165e-12, 2.08165e-12)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_luq8m"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_gysws"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_feu5m"]
 resource_local_to_scene = true
-albedo_texture = SubResource("ViewportTexture_luq8m")
+albedo_texture = SubResource("ViewportTexture_gysws")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_vc41r"]
 size = Vector2(1, 1)
@@ -74,9 +75,11 @@ visible = false
 material_override = SubResource("StandardMaterial3D_cvkl1")
 mesh = SubResource("BoxMesh_qu3u0")
 
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="." node_paths=PackedStringArray("viewport")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.0154471, 2.08165e-12)
 material_override = SubResource("StandardMaterial3D_feu5m")
 mesh = SubResource("PlaneMesh_vc41r")
+script = ExtResource("5_3y22d")
+viewport = NodePath("../SubViewport")
 
 [editable path="SubViewport/PageViewport"]

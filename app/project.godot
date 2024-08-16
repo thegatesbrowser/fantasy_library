@@ -28,5 +28,6 @@ enabled=PackedStringArray("res://addons/thegates_export/plugin.cfg")
 
 [rendering]
 
-anti_aliasing/quality/msaa_3d=2
+anti_aliasing/quality/msaa_3d=1
+anti_aliasing/quality/use_taa=true
 environment/defaults/default_environment="res://environment.tres"
