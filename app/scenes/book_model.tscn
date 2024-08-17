@@ -1,28 +1,85 @@
-[gd_scene load_steps=6 format=3 uid="uid://qus20jb3cb1r"]
+[gd_scene load_steps=15 format=3 uid="uid://d07sxb6fh773o"]
 
-[ext_resource type="Script" path="res://scripts/book_model.gd" id="1_5lo65"]
-[ext_resource type="Shader" path="res://shaders/book_model.gdshader" id="1_pjsv6"]
+[ext_resource type="Script" path="res://scripts/book_model.gd" id="1_nynd5"]
+[ext_resource type="Script" path="res://scripts/pages_animation.gd" id="2_npr18"]
+[ext_resource type="Texture2D" uid="uid://dmj52ta0vkl0t" path="res://assets/paper_texture.jpg" id="3_ejyxa"]
+[ext_resource type="PackedScene" uid="uid://boa66yyucskdx" path="res://scenes/page_viewport.tscn" id="3_papuc"]
+[ext_resource type="Script" path="res://scripts/set_viewport_texture.gd" id="5_3y22d"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_yksg1"]
-render_priority = 0
-shader = ExtResource("1_pjsv6")
-shader_parameter/color = Color(0.73, 0.608455, 0.4599, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bpq4t"]
+albedo_texture = ExtResource("3_ejyxa")
 
-[sub_resource type="BoxMesh" id="BoxMesh_yq2f3"]
+[sub_resource type="BoxMesh" id="BoxMesh_qu3u0"]
 size = Vector3(1, 0.0005, 1)
 
-[sub_resource type="MultiMesh" id="MultiMesh_22h2l"]
-transform_format = 1
-use_custom_data = true
-instance_count = 100
-mesh = SubResource("BoxMesh_yq2f3")
-buffer = PackedFloat32Array(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0005, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.001, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0015, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.002, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0025, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.003, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0035, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.004, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0045, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.005, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0055, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.006, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0065, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.007, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0075, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.008, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0085, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.009, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0095, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.01, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0105, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.011, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0115, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.012, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0125, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.013, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0135, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.014, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0145, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.015, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0155, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.016, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0165, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.017, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0175, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.018, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0185, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.019, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0195, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.02, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0205, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.021, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0215, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.022, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0225, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.023, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0235, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.024, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0245, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.025, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0255, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.026, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0265, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.027, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0275, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.028, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0285, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.029, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0295, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.03, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0305, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.031, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0315, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.032, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0325, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.033, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0335, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.034, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0345, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.035, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0355, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.036, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0365, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.037, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0375, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.038, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0385, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.039, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0395, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.04, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0405, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.041, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0415, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.042, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0425, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.043, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0435, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.044, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0445, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.045, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0455, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.046, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0465, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.047, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0475, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.048, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0485, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.049, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0.0495, 0, 0, 1, 0, 0, 0, 0, 0)
+[sub_resource type="BoxMesh" id="BoxMesh_py0yu"]
+size = Vector3(1, 0.06, 1)
 
-[node name="BookModel" type="Node3D" node_paths=PackedStringArray("multimeshInstance")]
-script = ExtResource("1_5lo65")
-multimeshInstance = NodePath("MultiMeshInstance3D")
-pages = 100
+[sub_resource type="BoxMesh" id="BoxMesh_efeuq"]
+size = Vector3(1, 0.1, 1)
 
-[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
-material_override = SubResource("ShaderMaterial_yksg1")
-multimesh = SubResource("MultiMesh_22h2l")
+[sub_resource type="ViewportTexture" id="ViewportTexture_lqr5h"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cvkl1"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_lqr5h")
+uv1_scale = Vector3(2, 2, 2.08165e-12)
+uv1_offset = Vector3(-0.33, 2.08165e-12, 2.08165e-12)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_xdqlg"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_feu5m"]
+resource_local_to_scene = true
+albedo_texture = SubResource("ViewportTexture_xdqlg")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_vc41r"]
+size = Vector2(1, 1)
+
+[node name="BookModelNotMultimesh" type="Node3D" node_paths=PackedStringArray("root", "meshInstance")]
+script = ExtResource("1_nynd5")
+root = NodePath("Pages")
+meshInstance = NodePath("MeshInstance3D")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+size = Vector2i(2048, 2048)
+
+[node name="PageViewport" parent="SubViewport" instance=ExtResource("3_papuc")]
+offset_right = 0.0
+offset_bottom = 0.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.018, 2.08165e-12)
+visible = false
+material_override = SubResource("StandardMaterial3D_bpq4t")
+mesh = SubResource("BoxMesh_qu3u0")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, -0.071, 2.08165e-12)
+material_override = SubResource("StandardMaterial3D_bpq4t")
+mesh = SubResource("BoxMesh_py0yu")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.516059, -0.051, 0)
+material_override = SubResource("StandardMaterial3D_bpq4t")
+mesh = SubResource("BoxMesh_efeuq")
+
+[node name="Pages" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.501958, -0.0403913, 0)
+script = ExtResource("2_npr18")
+
+[node name="Page" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, -3.48787e-16, -3.48787e-16, -3.48787e-16, -1, 8.74228e-08, -3.48787e-16, -8.74228e-08, -1, 0.5, 2.08165e-12, 2.08165e-12)
+visible = false
+material_override = SubResource("StandardMaterial3D_cvkl1")
+mesh = SubResource("BoxMesh_qu3u0")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="." node_paths=PackedStringArray("viewport")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.0154471, 2.08165e-12)
+material_override = SubResource("StandardMaterial3D_feu5m")
+mesh = SubResource("PlaneMesh_vc41r")
+script = ExtResource("5_3y22d")
+viewport = NodePath("../SubViewport")
+
+[editable path="SubViewport/PageViewport"]

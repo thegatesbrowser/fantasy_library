@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://vpu4lqopm36e"]
+[gd_scene load_steps=11 format=3 uid="uid://vpu4lqopm36e"]
 
 [ext_resource type="Environment" uid="uid://boev5mavuo2g2" path="res://environment.tres" id="1_e3nvk"]
 [ext_resource type="Script" path="res://scripts/request_sender.gd" id="2_emmkv"]
-[ext_resource type="PackedScene" uid="uid://d07sxb6fh773o" path="res://scenes/book_model_not_multimesh.tscn" id="2_xua5s"]
+[ext_resource type="PackedScene" uid="uid://d07sxb6fh773o" path="res://scenes/book_model.tscn" id="2_xua5s"]
+[ext_resource type="Script" path="res://scripts/retina_display.gd" id="4_1fcmr"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_b53hx"]
 viewport_path = NodePath("SubViewport")
@@ -11,12 +12,12 @@ viewport_path = NodePath("SubViewport")
 resource_local_to_scene = true
 albedo_texture = SubResource("ViewportTexture_b53hx")
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_ojcq3"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_d5wwq"]
 viewport_path = NodePath("SubViewport")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4u3r6"]
 resource_local_to_scene = true
-albedo_texture = SubResource("ViewportTexture_ojcq3")
+albedo_texture = SubResource("ViewportTexture_d5wwq")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1lm4h"]
 bg_color = Color(0.67449, 0.42076, 0.312285, 1)
@@ -162,6 +163,9 @@ le_request = NodePath("../UI/Control/MarginContainer/VBoxContainer/HBoxContainer
 btn_request = NodePath("../UI/Control/MarginContainer/VBoxContainer/HBoxContainer/Button")
 rtl_raw_result = NodePath("../UI/Control/MarginContainer/VBoxContainer/Control/MarginContainer/RichTextLabel")
 rtl_result = NodePath("../BookModelNotMultimesh/SubViewport/PageViewport/MarginContainer/RichTextLabel")
+
+[node name="RetinaDisplay" type="Node" parent="."]
+script = ExtResource("4_1fcmr")
 
 [editable path="BookModelNotMultimesh"]
 [editable path="BookModelNotMultimesh/SubViewport/PageViewport"]
